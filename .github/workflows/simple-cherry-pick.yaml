@@ -1,0 +1,24 @@
+name: Cherry Pick On Comment
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  cherry-pick:
+    name: Cherry Pick
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/cherry-pick')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+      - name: Checkout the latest code
+        uses: actions/checkout@v2
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
+      - name: Automatic Cherry Pick
+        uses: tier4/simple-cherry-pick@v2_beta
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
