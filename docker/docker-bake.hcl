@@ -1,5 +1,6 @@
 group "default" {
   targets = [
+    "core",
     "core-devel",
     "universe-sensing-perception-devel",
     "universe-sensing-perception",
@@ -9,12 +10,15 @@ group "default" {
     "universe-planning-control",
     "universe-vehicle-system-devel",
     "universe-vehicle-system",
+    "universe-visualization-devel",
+    "universe-visualization",
     "universe-devel",
     "universe"
   ]
 }
 
 // For docker/metadata-action
+target "docker-metadata-action-core" {}
 target "docker-metadata-action-core-devel" {}
 target "docker-metadata-action-universe-sensing-perception-devel" {}
 target "docker-metadata-action-universe-sensing-perception" {}
@@ -24,8 +28,16 @@ target "docker-metadata-action-universe-planning-control-devel" {}
 target "docker-metadata-action-universe-planning-control" {}
 target "docker-metadata-action-universe-vehicle-system-devel" {}
 target "docker-metadata-action-universe-vehicle-system" {}
+target "docker-metadata-action-universe-visualization-devel" {}
+target "docker-metadata-action-universe-visualization" {}
 target "docker-metadata-action-universe-devel" {}
 target "docker-metadata-action-universe" {}
+
+target "core" {
+  inherits = ["docker-metadata-action-core"]
+  dockerfile = "docker/Dockerfile"
+  target = "core"
+}
 
 target "core-devel" {
   inherits = ["docker-metadata-action-core-devel"]
@@ -79,6 +91,18 @@ target "universe-vehicle-system" {
   inherits = ["docker-metadata-action-universe-vehicle-system"]
   dockerfile = "docker/Dockerfile"
   target = "universe-vehicle-system"
+}
+
+target "universe-visualization-devel" {
+  inherits = ["docker-metadata-action-universe-visualization-devel"]
+  dockerfile = "docker/Dockerfile"
+  target = "universe-visualization-devel"
+}
+
+target "universe-visualization" {
+  inherits = ["docker-metadata-action-universe-visualization"]
+  dockerfile = "docker/Dockerfile"
+  target = "universe-visualization"
 }
 
 target "universe-devel" {
